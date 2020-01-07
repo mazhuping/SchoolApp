@@ -1,28 +1,27 @@
 import React, {Component} from 'react';
-import {Table} from 'antd';<%if(bottomToolItems && bottomToolItems.length){%>
-import FixBottom from '@/layouts/fix-bottom';<%}%>
-import {<%if(queryItems && queryItems.length){%>
+import {Table} from 'antd';
+import FixBottom from '@/layouts/fix-bottom';
+import {
     QueryBar,
-    QueryItem,<%}%><%if(bottomToolItems && bottomToolItems.length){%>
-    ToolItem,<%}%>
+    QueryItem,
+    ToolItem,
     Pagination,
-    Operator,<%if(toolItems && toolItems.length){%>
-    ToolBar,<%}%>
+    Operator,
+    ToolBar,
 } from "@/library/antd";
 import PageContent from '@/layouts/page-content';
-import config from '@/commons/config-hoc';<% if(permissionPrefix){%>
-import {hasPermission} from '@/commons';<%}%>
-import <%= capitalName %>Edit from './<%= capitalName %>Edit';
+import config from '@/commons/config-hoc';
+import IncomeEdit from './IncomeEdit';
 
 @config({
-    path: '<%= routePath %>',
+    path: '/IncomeList',
     ajax: true,
     connect(state) {
         return {local: state.system.i18n.commonPage}
     }
 
 })
-export default class <%= capitalName %>List extends Component {
+export default class IncomeList extends Component {
     state = {
         loading: false,
         dataSource: [],
@@ -32,71 +31,134 @@ export default class <%= capitalName %>List extends Component {
         params: {},
         id: void 0,
         visible: false,
-    };<%if(queryItems && queryItems.length){%>
+    };
 
     // TODO 查询条件
     queryItems = [
-        [<% for (let i = 0;i<queryItems.length;i++){%>
+        [
             {
-                type: '<%= queryItems[i].type%>',
-                field: '<%= queryItems[i].field%>',
-                label: '<%= queryItems[i].label%>',
-            },<%}%>
+                type: 'input',
+                field: 'SearchText',
+                label: '搜索',
+            },
+            {
+                type: 'select',
+                field: 'SchoolID',
+                label: '学校',
+            },
+            {
+                type: 'select',
+                field: 'ClassTypeID',
+                label: '课程类型',
+            },
+            {
+                type: 'date-range',
+                field: 'paytime',
+                label: '缴费时间',
+            },
+            {
+                type: 'select',
+                field: 'PayReasonType',
+                label: '缴费类型',
+            },
+            {
+                type: 'select',
+                field: 'StuType',
+                label: '学生分类',
+            },
+            {
+                type: 'select',
+                field: 'StudyAdviser',
+                label: '学习顾问',
+            },
+            {
+                type: 'select',
+                field: 'ClassAdviserUserID',
+                label: '带班老师',
+            },
+            {
+                type: 'select',
+                field: 'RecommendUserID',
+                label: '转介绍老师',
+            },
         ],
-    ];<%}%><%if(toolItems && toolItems.length){%>
+    ];
 
     // TODO 顶部工具条
-    toolItems = [<% for (let i = 0;i<toolItems.length;i++){%>
+    toolItems = [
         {
-            type: '<%= toolItems[i].type%>',
-            text: '<%= toolItems[i].text%>',
-            icon: '<%= toolItems[i].icon%>',<%if(permissionPrefix && toolItems[i].permission){%>
-            visible: hasPermission('<%= permissionPrefix %>_<%= toolItems[i].permission%>'),<%}%>
+            type: 'primary',
+            text: '添加缴费',
+            icon: 'plus',
             onClick: () => {
                 // TODO
             },
-        },<%}%>
-    ];<%}%><%if(bottomToolItems && bottomToolItems.length){%>
+        },
+    ];
 
     // TODO 底部工具条
-    bottomToolItems = [<% for (let i = 0;i<bottomToolItems.length;i++){%>
+    bottomToolItems = [
         {
-            type: '<%= bottomToolItems[i].type%>',
-            text: '<%= bottomToolItems[i].text%>',
-            icon: '<%= bottomToolItems[i].icon%>',<%if(permissionPrefix && bottomToolItems[i].permission){%>
-            visible: hasPermission('<%= permissionPrefix %>_<%= bottomToolItems[i].permission%>'),<%}%>
+            type: 'default',
+            text: 'exportCurrent',
+            icon: '',
             onClick: () => {
                 // TODO
             },
-        },<%}%>
-    ];<%}%>
+        },
+        {
+            type: 'primary',
+            text: 'exportAll',
+            icon: '',
+            onClick: () => {
+                // TODO
+            },
+        },
+    ];
 
-    columns = [<% for (let i = 0;i<fields.length;i++){%>
-        {title: '<%= fields[i].title%>', dataIndex: '<%= fields[i].dataIndex%>'},<%}%>
+    columns = [
+        {title: '支付ID', dataIndex: 'PaymentID'},
+        {title: '缴费类型', dataIndex: 'PayReasonTypeName'},
+        {title: '学生姓名', dataIndex: 'StudentName'},
+        {title: '学生类型', dataIndex: 'StuTypeName'},
+        {title: '学生来源', dataIndex: 'StudentSourceName'},
+        {title: '付款日期', dataIndex: 'PayDateString'},
+        {title: '报读课程', dataIndex: 'CourseName'},
+        {title: '购买课时', dataIndex: 'ClassHourBuy'},
+        {title: '赠送课时', dataIndex: 'ClassHourFree'},
+        {title: '支付金额', dataIndex: 'PayAmount'},
+        {title: '欠款金额', dataIndex: 'DebtAmount'},
+        {title: '代金券', dataIndex: 'Voucher'},
+        {title: '收据编号', dataIndex: 'PaySeriaNo'},
+        {title: '支付方式', dataIndex: 'PaymentType_Name'},
+        {title: '学习顾问', dataIndex: 'StudyAdviserName'},
+        {title: '带班老师', dataIndex: 'ClassAdviserUserName'},
+        {title: '转介绍老师', dataIndex: 'RecommendUserName'},
+        {title: '赠送礼物', dataIndex: 'Present'},
+        {title: '负责人', dataIndex: 'PerformanceUserName'},
+        {title: '备注', dataIndex: 'Memo'},
         {
             title: 'operator',
             key: 'operator',
             render: (text, record) => {
-                const {id, <%= fields[0].dataIndex%>} = record;
-                const successTip = `delete“${<%= fields[0].dataIndex%>}”successful！`;
+                const {id, PaymentID} = record;
+                const successTip = `delete“${PaymentID}”successful！`;
                 const items = [
                     {
-                        label: 'edit',<% if(permissionPrefix){%>
-                        visible: hasPermission('<%= permissionPrefix %>_UPDATE'),<%}%>
+                        label: 'edit',
                         onClick: () => {
                             this.handleEdit(id);
                         },
                     },
                     {
                         label: 'del',
-                        color: 'red',<% if(permissionPrefix){%>
-                        visible: hasPermission('<%= permissionPrefix %>_DELETE'),<%}%>
+                        color: 'red',
                         confirm: {
-                            title: `您确定要删除“${<%= fields[0].dataIndex%>}”？`,
+                            title: `您确定要删除“${PaymentID}”？`,
                             onConfirm: () => {
                                 this.setState({loading: true});
                                 this.props.ajax
-                                    .del(`<%= ajaxUrl %>?Id=${encodeURIComponent(id)}`, null, {successTip})
+                                    .del(`/Income?Id=${encodeURIComponent(id)}`, null, {successTip})
                                     .then(() => this.handleSearch())
                                     .finally(() => this.setState({loading: false}));
                             },
@@ -118,7 +180,7 @@ export default class <%= capitalName %>List extends Component {
 
         this.setState({loading: true});
         this.props.ajax
-            .get('<%= ajaxUrl %>', {...params, PageIndex, pageSize})
+            .get('/Income', {...params, PageIndex, pageSize})
             .then(res => {
                 if (res) {
                     const {data: dataSource, total} = res;
@@ -151,7 +213,7 @@ export default class <%= capitalName %>List extends Component {
         } = this.state;
 
         return (
-            <PageContent loading={loading}><%if(queryItems && queryItems.length){%>
+            <PageContent loading={loading}>
                 <QueryBar>
                     <QueryItem
                         loadOptions={this.fetchOptions}
@@ -159,9 +221,9 @@ export default class <%= capitalName %>List extends Component {
                         onSubmit={params => this.setState({params}, this.handleSearch)}
                     />
                 </QueryBar>
-                <%}%><%if(toolItems && toolItems.length){%>
+                
                 <ToolBar items={this.toolItems}/>
-                    <%}%>
+                    
                 <Table
                     columns={this.columns}
                     dataSource={dataSource}
@@ -175,12 +237,12 @@ export default class <%= capitalName %>List extends Component {
                     pageSize={pageSize}
                     onPageNumChange={ PageIndex => this.setState({PageIndex}, this.handleSearch)}
                     onPageSizeChange={pageSize => this.setState({pageSize, PageIndex: 1}, this.handleSearch)}
-                /><%if(bottomToolItems && bottomToolItems.length){%>
+                />
                 <FixBottom>
                     <ToolItem items={this.bottomToolItems}/>
-                </FixBottom><%}%>
+                </FixBottom>
 
-                <<%= capitalName %>Edit
+                <IncomeEdit
                     id={id}
                     visible={visible}
                     onOk={() => this.setState({visible: false})}

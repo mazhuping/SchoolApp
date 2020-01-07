@@ -1,5 +1,5 @@
 import React from 'react';
-import {LocaleProvider} from 'antd';
+import {ConfigProvider } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import enGB from 'antd/lib/locale-provider/en_GB';
 import moment from 'moment';
@@ -82,9 +82,9 @@ export default class Local extends React.Component {
         const antLan = antLocalMap[local];
 
         return (
-            <LocaleProvider locale={antLan}>
+            <ConfigProvider  locale={antLan}>
                 {children}
-            </LocaleProvider>
+            </ConfigProvider >
         );
     }
 }

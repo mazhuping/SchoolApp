@@ -7,7 +7,7 @@ import {FormElement} from '@/library/antd';
     ajax: true,
 })
 @Form.create()
-export default class <%= capitalName %>Edit extends Component {
+export default class ClassRoomEdit extends Component {
     state = {
         loading: false,
         data: {},
@@ -36,7 +36,7 @@ export default class <%= capitalName %>Edit extends Component {
         // TODO 根据id 发送ajax请求获取数据
         this.setState({loading: true});
         this.props.ajax
-            .get(`<%= ajaxUrl %>?Id=${encodeURIComponent(id)}`)
+            .get(`/ClassRoom?Id=${encodeURIComponent(id)}`)
             .then(res => {
                 this.setState({data: res});
             })
@@ -59,7 +59,7 @@ export default class <%= capitalName %>Edit extends Component {
             const ajax = id ? this.props.ajax.put : this.props.ajax.post;
 
             this.setState({loading: true});
-            ajax(`<%= ajaxUrl %>`, params)
+            ajax(`/ClassRoom`, params)
                 .then(() => {
                     if (onOk) onOk();
                 })
@@ -82,7 +82,7 @@ export default class <%= capitalName %>Edit extends Component {
     render() {
         const {visible} = this.props;
         const {loading, data} = this.state;
-        const title = data.id ? '修改<%= chineseName %>' : '添加<%= chineseName %>';
+        const title = data.id ? '修改ClassRoom' : '添加ClassRoom';
         const FormElement = this.FormElement;
 
         return (
@@ -97,19 +97,55 @@ export default class <%= capitalName %>Edit extends Component {
                 <Spin spinning={loading}>
                     <Form>
                         {data.id ? (<FormElement type="hidden" field="id" decorator={{initialValue: data.id}}/>) : null}
-    <% for (let i = 0;i<fields.length;i++){%>
+    
                         <FormElement
-                            label="<%= fields[i].title%>"
-                            type="<%= fields[i].type%>"
-                            field="<%= fields[i].dataIndex%>"
+                            label="课室ID"
+                            type="hidden"
+                            field="ClassRoomID"
                             decorator={{
-                                initialValue: data.<%= fields[i].dataIndex%>,
+                                initialValue: data.ClassRoomID,
                                 rules: [
-                                    {required: <%= fields[i].isRequired %>, message: '<%= fields[i].title %>不能为空！'},
+                                    {required: true, message: '课室ID不能为空！'},
                                 ],
                             }}
                         />
-    <%}%>
+    
+                        <FormElement
+                            label="教室名"
+                            type="input"
+                            field="ClassRoomName"
+                            decorator={{
+                                initialValue: data.ClassRoomName,
+                                rules: [
+                                    {required: true, message: '教室名不能为空！'},
+                                ],
+                            }}
+                        />
+    
+                        <FormElement
+                            label="学校名"
+                            type="select"
+                            field="SchoolName"
+                            decorator={{
+                                initialValue: data.SchoolName,
+                                rules: [
+                                    {required: true, message: '学校名不能为空！'},
+                                ],
+                            }}
+                        />
+    
+                        <FormElement
+                            label="备注"
+                            type="input"
+                            field="Remark"
+                            decorator={{
+                                initialValue: data.Remark,
+                                rules: [
+                                    {required: true, message: '备注不能为空！'},
+                                ],
+                            }}
+                        />
+    
                     </Form>
                 </Spin>
             </Modal>
