@@ -1,5 +1,4 @@
 import {ajax} from '@/commons/ajax';
-
 export default {
     initialState: {
         host: {value: ''},

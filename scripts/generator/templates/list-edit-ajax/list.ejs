@@ -114,11 +114,11 @@ export default class <%= capitalName %>List extends Component {
     }
 
     handleSearch = () => {
-        const {params, PageIndex, pageSize} = this.state;
+        const {params, pageIndex, pageSize} = this.state;
 
         this.setState({loading: true});
         this.props.ajax
-            .get('<%= ajaxUrl %>', {...params, PageIndex, pageSize})
+            .get('<%= ajaxUrl %>', {...params, pageIndex, pageSize})
             .then(res => {
                 if (res) {
                     const {data: dataSource, total} = res;
@@ -144,7 +144,7 @@ export default class <%= capitalName %>List extends Component {
             loading,
             dataSource,
             total,
-            PageIndex,
+            pageIndex,
             pageSize,
             visible,
             id,
@@ -156,7 +156,7 @@ export default class <%= capitalName %>List extends Component {
                     <QueryItem
                         loadOptions={this.fetchOptions}
                         items={this.queryItems}
-                        onSubmit={params => this.setState({params}, this.handleSearch)}
+                        onSubmit={params => this.setState({params, pageIndex: 1}, this.handleSearch)}
                     />
                 </QueryBar>
                 <%}%><%if(toolItems && toolItems.length){%>
@@ -171,10 +171,10 @@ export default class <%= capitalName %>List extends Component {
 
                 <Pagination
                     total={total}
-                    PageNum={PageIndex}
+                    PageNum={pageIndex}
                     pageSize={pageSize}
-                    onPageNumChange={ PageIndex => this.setState({PageIndex}, this.handleSearch)}
-                    onPageSizeChange={pageSize => this.setState({pageSize, PageIndex: 1}, this.handleSearch)}
+                    onPageNumChange={ pageIndex => this.setState({pageIndex}, this.handleSearch)}
+                    onPageSizeChange={pageSize => this.setState({pageSize, pageIndex: 1}, this.handleSearch)}
                 /><%if(bottomToolItems && bottomToolItems.length){%>
                 <FixBottom>
                     <ToolItem items={this.bottomToolItems}/>

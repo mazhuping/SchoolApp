@@ -37,6 +37,7 @@ const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
 const useTypeScript = fs.existsSync(paths.appTsConfig);
 
 // style files regexes
+const scssRegex=/\.scss$/;
 const cssRegex = /\.css$/;
 const lessModuleRegex = /\.less$/;
 const lessRegex = /\.less$/;
@@ -388,6 +389,7 @@ module.exports = function (webpackEnv) {
                                 sourceMaps: false,
                             },
                         },
+
                         // "postcss" loader applies autoprefixer to our CSS.
                         // "css" loader resolves paths in CSS and adds assets as dependencies.
                         // "style" loader turns CSS into JS modules that inject <style> tags.
@@ -407,6 +409,34 @@ module.exports = function (webpackEnv) {
                             // See https://github.com/webpack/webpack/issues/6571
                             sideEffects: true,
                         },
+                        // {
+                        //     test: /\.scss$/,
+                        //     use: [
+                        //         {loader: require.resolve('style-loader')},
+                        //         {loader: require.resolve('css-loader')},
+                        //         {
+                        //             loader: require.resolve('postcss-loader'),
+                        //             options: {
+                        //                 // Necessary for external CSS imports to work
+                        //                 // https://github.com/facebookincubator/create-react-app/issues/2677
+                        //                 ident: 'postcss',
+                        //                 plugins: () => [
+                        //                     require('postcss-flexbugs-fixes'),
+                        //                     autoprefixer({
+                        //                         browsers: [
+                        //                             '>1%',
+                        //                             'last 4 versions',
+                        //                             'Firefox ESR',
+                        //                             'not ie < 9', // React doesn't support IE8 anyway
+                        //                         ],
+                        //                         flexbox: 'no-2009',
+                        //                     }),
+                        //                 ],
+                        //             },
+                        //         },
+                        //         require.resolve('sass-loader')
+                        //     ],
+                        // },
                         // Adds support for CSS Modules, but using LESS
                         // using the extension .less
                         {
@@ -435,6 +465,17 @@ module.exports = function (webpackEnv) {
                                 'less-loader'
                             ),
                         },
+                        // {
+                        //     test:scssRegex,
+                        //     use: getStyleLoaders(
+                        //         {
+                        //             importLoaders: 2,
+                        //             sourceMap: isEnvProduction && shouldUseSourceMap,
+                        //         },
+                        //         'sass-loader'
+                        //     ),
+                        // },
+
                         // "file" loader makes sure those assets get served by WebpackDevServer.
                         // When you `import` an asset, you get its (virtual) filename.
                         // In production, they would get copied to the `build` folder.

@@ -1,4 +1,4 @@
-const mysqlService = require('../service/my-sql');
+const mysqlService = require('../service/mssql');
 
 module.exports = {
     testConnection(req, res, next) {
@@ -24,6 +24,7 @@ module.exports = {
                 res.status(400).send({error: err, message: '获取表名失败'});
             });
     },
+
 
     getTableColumns(req, res, next) {
         const {host, port, user, password, database, table} = req.query;

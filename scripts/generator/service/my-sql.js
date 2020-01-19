@@ -57,7 +57,7 @@ function getTableNames(options) {
     });
 }
 
-function getTableColumns(options) {
+function getTableColumns(options)   {
     return new Promise(function (resolve, reject) {
         const {host, port, user, password, database, table} = options;
         const connection = mysql.createConnection({

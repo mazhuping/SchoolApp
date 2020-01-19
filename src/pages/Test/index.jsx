@@ -253,31 +253,6 @@ export default class index extends Component {
 
     componentDidMount=()=> {
         this.fetchMenus(this.state.pageNum, this.state.pageSize);
-        setInterval(()=>{
-            console.log("interval")
-
-            this.props.ajax
-                .get('/GetFinishedJob')
-                .then(res=>{
-                        this.setState({FinishedJobs:res})
-                    }
-                )
-                .finally(() => {
-                    this.setState({loading: false})
-                })
-
-            this.props.ajax
-                .get('/GetPendingJob')
-                .then(res=>{
-                    if(res.length>0){
-                        this.setState({PendingJobs:res})
-                    }
-                })
-                .finally(() => {
-                    this.setState({loading: false})
-                })
-
-        },3000);
 
     }
 

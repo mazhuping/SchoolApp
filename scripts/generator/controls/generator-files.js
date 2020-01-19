@@ -94,6 +94,7 @@ module.exports = {
     },
 
     getSrcDirs(req, res, next) {
+
         const dirs = getDirs();
         if (dirs && dirs.children) {
             res.send(dirs.children);
